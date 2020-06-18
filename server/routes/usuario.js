@@ -2,12 +2,18 @@ const express = require('express');
 const Usuario = require('../models/usuario');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
+const { verificaToken, verificaAdminRole } = require('../middlewares/autenticacion');
 
 const app = express();
 
 const saltRounds = 10;
 
-app.get('/usuario', function (req, res) {
+app.get('/usuario', verificaToken, (req, res) => {
+    /*return res.json({
+        usuario: req.usuario,
+        nombre: req.usuario.nombre,
+        email: req.usuario.email
+    });*/
     let desde = req.query.desde || 0;
     desde = Number(desde); // lo convertimos a un numero
 
@@ -25,7 +31,7 @@ app.get('/usuario', function (req, res) {
                 });
             }
 
-            Usuario.count({ estado: true }, (err, conteo) => {
+            Usuario.count({ estado: true }, function (err, conteo) {
                 res.json({
                     ok: true,
                     users: usuarios,
@@ -35,7 +41,7 @@ app.get('/usuario', function (req, res) {
         });
 });
 
-app.post('/usuario', function (req, res) {
+app.post('/usuario', [verificaToken, verificaAdminRole], (req, res) => {
     let body = req.body;
 
     let usuario = new Usuario({
@@ -71,7 +77,7 @@ app.post('/usuario', function (req, res) {
     }*/
 });
 
-app.put('/usuario/:id', function (req, res) {
+app.put('/usuario/:id', [verificaToken, verificaAdminRole], function (req, res) {
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);// asi le decimos los campos que puede modificar
     // Ejemplo de url -> http://localhost:3000/usuario/12
@@ -91,7 +97,7 @@ app.put('/usuario/:id', function (req, res) {
     });
 });
 
-app.delete('/usuario/:id', function (req, res) {
+app.delete('/usuario/:id', [verificaToken, verificaAdminRole], function (req, res) {
     //let id = req.body.id; ESTA ES UNA FORMA
     let id = req.params.id;
 

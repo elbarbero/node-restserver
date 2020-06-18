@@ -1,15 +1,27 @@
 // ========================
-//    PUERTO
+//  PUERTO
 // ========================
 process.env.PORT = process.env.PORT || 3000; //si el puerto no existe, le ponemos el puerto 3000
 
 // ========================
-//    ENTORNO
+//  ENTORNO
 // ========================
 process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 
 // ========================
-//    BASE DE DATOS
+//  VENCIMIENTO DEL TOKEN
+// ========================
+// 60 segundos * 60 minutos * 24 horas * 30 dias
+process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 30;
+
+// ========================
+//  SEED DE AUTENTICACION
+// ========================
+// SEED es una variable de entorno en heroku
+process.env.SEED = process.env.SEED || 'esta-es-la-seed-desarrollo';
+
+// ========================
+//  BASE DE DATOS
 // ========================
 let urlDB;
 

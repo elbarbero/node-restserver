@@ -12,7 +12,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-app.use(require('./routes/usuario'));
+// Configuracion global de rutas
+app.use(require('./routes/index'));
 
 // 27017 --> Este el puerto en el que está mongoDB
 mongoose.connect(process.env.URLBD, 
